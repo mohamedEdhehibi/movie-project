@@ -1,23 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import Movielist from './components/Movielist';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import tabmovie from './source/Moviejson'
+import Filter from './components/Filter';
+import { useState } from 'react';
 
 function App() {
+  const [movies,setMovies]=useState(tabmovie)
+  const [filter,setFilter]=useState({title:'',rating:''})
+const reset=()=>(
+  setFilter({ title: '', rating: '' })
+)
+  const handleonchange=(type,value)=>{
+    setFilter({...filter,[type]:value})
+    console.log(filter);
+  }
+  
+  const filteredmovie=movies.filter(film=>{return (film.title.toLowerCase().includes(filter.title.toLowerCase())
+                                                  && String(film.rating).includes(filter.rating) )} )
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Filter handlefilter={handleonchange} reset={reset}/>
+      <Movielist movie={filteredmovie}/>
     </div>
   );
 }
